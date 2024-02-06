@@ -4,13 +4,13 @@
         xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
         version="2.0">
 
-    <persistence-unit name="br.com.fredericci.pu">
+    <persistence-unit name="uol.compass.commerce">
         <description>Hibernate EntityManager Demo</description>
-        <class>uol.compass.commerce.Customer</class>
+        <class>uol.compass.commerce.Product</class>
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:my_database"/>
             <property name="javax.persistence.jdbc.user" value="sa"/>
