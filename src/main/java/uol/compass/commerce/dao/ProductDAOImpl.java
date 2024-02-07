@@ -17,5 +17,4 @@ public class ProductDAOImpl implements ProductDAO {
         entityManager.persist(product);
         entityManager.getTransaction().commit();
     }
-
 }
