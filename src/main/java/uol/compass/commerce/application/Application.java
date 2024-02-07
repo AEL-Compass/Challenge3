@@ -28,7 +28,8 @@ public class Application {
         do {
             System.out.println("Menu:");
             System.out.println("1. Inserir produto");
-            System.out.println("2. Sair");
+            System.out.println("2. Exibir todos os produtos em JSON");
+            System.out.println("3. Sair");
             System.out.print("Escolha uma opção: ");
             choice = scanner.nextInt();
 
@@ -37,12 +38,15 @@ public class Application {
                     insertProductFromInput();
                     break;
                 case 2:
+                    displayAllProductsAsJson();
+                    break;
+                case 3:
                     System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (choice != 2);
+        } while (choice != 3);
 
         // Fechando o scanner
         scanner.close();
@@ -81,5 +85,10 @@ public class Application {
         // Inserir o produto no banco de dados
         productDAO.insertProduct(product);
         System.out.println("Produto inserido com sucesso!");
+    }
+
+    public static void displayAllProductsAsJson() {
+        String productsJson = productDAO.getAllProductsAsJson();
+        System.out.println(productsJson);
     }
 }
