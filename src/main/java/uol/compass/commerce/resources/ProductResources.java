@@ -25,7 +25,7 @@ public class ProductResources {
             updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getDescription(), updatedProduct.getValue());
         
         } catch (Exception e) {
-            System.out.println("Erro: Produto não encontrado.%Detalhes: " + e.getMessage());
+            System.out.println("Erro: " + e.getMessage());
         }
     }
 

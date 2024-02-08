@@ -14,7 +14,7 @@ public class ProductServices {
         Product verifyProduct = repository.findById(id);
 
         if(verifyProduct == null) {
-            return null;
+            throw new RuntimeException("Produto não encontrado.");
         }
         return repository.updateById(id, product);
     }

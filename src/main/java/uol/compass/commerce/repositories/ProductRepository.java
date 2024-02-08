@@ -3,14 +3,12 @@ package uol.compass.commerce.repositories;
 // import java.util.List;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
 import uol.compass.commerce.entities.Product;
 
 public class ProductRepository {
-    EntityManager entityManager;
-    EntityTransaction transaction;
+    private EntityManager entityManager;
+    private EntityTransaction transaction;
 
     public ProductRepository() {
         entityManager = PersistenceManager.getEntityManager();
