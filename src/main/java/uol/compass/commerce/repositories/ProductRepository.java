@@ -4,12 +4,18 @@ package uol.compass.commerce.repositories;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Persistence;
 import uol.compass.commerce.entities.Product;
 
 public class ProductRepository {
-    EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("uol.compass.commerce");
-    EntityManager entityManager = entityManagerFactory.createEntityManager();
+    EntityManager entityManager;
+    EntityTransaction transaction;
+
+    public ProductRepository() {
+        entityManager = PersistenceManager.getEntityManager();
+        transaction = entityManager.getTransaction();
+    }
 
     // public Product insert(Product product) {
     //     entityManager.getTransaction().begin();
@@ -35,22 +41,22 @@ public class ProductRepository {
     }
 
     public Product updateById(Integer id, Product product) {
-        entityManager.getTransaction().begin();
+        transaction.begin();
         Product productToUpdate = entityManager.find(Product.class, id);
         productToUpdate.setName(product.getName());
         productToUpdate.setDescription(product.getDescription());
         productToUpdate.setValue(product.getValue());
-        entityManager.getTransaction().commit();
+        transaction.commit();
 
         return productToUpdate;
     }
 
-    // public void deleteById(Integer id) {
-    //     entityManager.getTransaction().begin();
-    //     Product product = entityManager.find(Product.class, id);
-    //     entityManager.remove(product);
-    //     entityManager.getTransaction().commit();
+    public void deleteById(Integer id) {
+        transaction.begin();
+        Product product = entityManager.find(Product.class, id);
+        entityManager.remove(product);
+        transaction.commit();
 
-    //     // Verificar qual o retorno em caso de erro
-    // }
+        // Vai lançar uma exceção se ocorrer algum erro, adicionar tratamento em resources
+    }
 }

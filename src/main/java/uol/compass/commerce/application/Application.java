@@ -17,7 +17,7 @@ public class Application {
     private static EntityManager entityManager;
     private static ProductDAO productDAO;
     private static Scanner scanner;
-    private static ProductResources productResources;
+    private static ProductResources productResources = new ProductResources();
 
     public static void main(String[] args) throws SQLException {
         entityManagerFactory = Persistence.createEntityManagerFactory("uol.compass.commerce");
@@ -48,7 +48,7 @@ public class Application {
                     updateProductById();
                     break;
                 case 4:
-                    // deleteProductById();
+                    deleteProductById();
                     break;
                 case 5:
                     System.out.println("Saindo...");
@@ -88,7 +88,6 @@ public class Application {
     }
 
     public static void updateProductById() {
-        productResources = new ProductResources();
         System.out.print("ID do produto a ser atualizado: ");
         int id = scanner.nextInt();
         Product product = new Product();
@@ -103,7 +102,13 @@ public class Application {
         System.out.print("Novo preço: ");
         product.setValue(scanner.nextDouble());
 
-        // Atualizar o produto no banco de dados
         productResources.updateProductById(id, product);
+    }
+
+    public static void deleteProductById() {
+        System.out.print("ID do produto a ser deletado: ");
+        int id = scanner.nextInt();
+
+        productResources.deleteProductById(id);
     }
 }
