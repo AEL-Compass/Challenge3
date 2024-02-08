@@ -1,27 +1,85 @@
 package uol.compass.commerce.application;
 
 import java.sql.SQLException;
+import java.util.Scanner;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import uol.compass.commerce.dao.ProductDAO;
+import uol.compass.commerce.dao.ProductDAOImpl;
 import uol.compass.commerce.entities.Product;
 
 public class Application {
 
+    private static EntityManagerFactory entityManagerFactory;
+    private static EntityManager entityManager;
+    private static ProductDAO productDAO;
+    private static Scanner scanner;
+
     public static void main(String[] args) throws SQLException {
+        entityManagerFactory = Persistence.createEntityManagerFactory("uol.compass.commerce");
+        entityManager = entityManagerFactory.createEntityManager();
+        productDAO = new ProductDAOImpl(entityManager);
+        scanner = new Scanner(System.in);
 
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("uol.compass.commerce");
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        // Menu interativo
+        int choice = 0;
+        do {
+            System.out.println("Menu:");
+            System.out.println("1. Inserir produto");
+            System.out.println("2. Sair");
+            System.out.print("Escolha uma opção: ");
+            choice = scanner.nextInt();
 
-        Product product = new Product();
-        product.setProductName("Copo Stanley");
-        product.setProductDescription("Copo para tomar cerveja");
+            switch (choice) {
+                case 1:
+                    insertProductFromInput();
+                    break;
+                case 2:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
+            }
+        } while (choice != 2);
 
-        entityManager.getTransaction().begin();
-        entityManager.persist(product);
-        entityManager.getTransaction().commit();
-
+        // Fechando o scanner
+        scanner.close();
+        entityManager.close();
+        entityManagerFactory.close();
     }
-    
+
+    public static void insertProductFromInput() {
+        Product product = new Product();
+        scanner.nextLine(); // Consumir a quebra de linha pendente após o nextInt()
+        
+        System.out.print("Nome do produto: ");
+        product.setProductName(scanner.nextLine());
+
+        System.out.print("Código do produto: ");
+        product.setProductCode(scanner.nextLine());
+
+        System.out.print("Modelo: ");
+        product.setModel(scanner.nextLine());
+
+        System.out.print("Cor: ");
+        product.setColor(scanner.nextLine());
+
+        System.out.print("Capacidade: ");
+        product.setCapacity(scanner.nextLine());
+
+        System.out.print("Status (Disponível/Indisponível): ");
+        product.setStatus(scanner.nextLine());
+
+        System.out.print("Quantidade: ");
+        product.setQuantity(scanner.nextInt());
+
+        System.out.print("Preço: ");
+        product.setPrice(scanner.nextDouble());
+
+        // Inserir o produto no banco de dados
+        productDAO.insertProduct(product);
+        System.out.println("Produto inserido com sucesso!");
+    }
 }
