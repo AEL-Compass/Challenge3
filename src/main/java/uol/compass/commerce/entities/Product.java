@@ -6,93 +6,75 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "tb_product")
 public class Product implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String productCode;
-    private String productName;
-    private String model;
-    private String color;
-    private String capacity;
-    private String status; // Available/Unavailable
-    private Integer quantity;
-    private Double price;
+    private String name;
+    private String description;
+    private Double value;
 
     public Integer getId() {
         return id;
     }
 
-    public void setId(final Integer id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public String getName() {
+        return name;
     }
 
-    public void setProductCode(final String productCode) {
-        this.productCode = productCode;
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public String getDescription() {
+        return description;
     }
 
-    public String getProductName() {
-        return productName;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setProductName(final String productName) {
-        this.productName = productName;
+    public Double getValue() {
+        return value;
     }
 
-    public String getModel() {
-        return model;
+    public void setValue(Double value) {
+        this.value = value;
     }
 
-    public void setModel(final String model) {
-        this.model = model;
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(final String color) {
-        this.color = color;
-    }
-
-    public String getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(final String capacity) {
-        this.capacity = capacity;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(final String status) {
-        this.status = status;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(final Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(final Double price) {
-        this.price = price;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Product other = (Product) obj;
+        if (name == null) {
+            if (other.name != null)
+                return false;
+        } else if (!name.equals(other.name))
+            return false;
+        return true;
     }
 
 }

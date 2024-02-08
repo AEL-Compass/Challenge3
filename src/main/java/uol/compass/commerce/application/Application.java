@@ -1,94 +1,71 @@
 package uol.compass.commerce.application;
 
-import java.sql.SQLException;
 import java.util.Scanner;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import uol.compass.commerce.dao.ProductDAO;
-import uol.compass.commerce.dao.ProductDAOImpl;
 import uol.compass.commerce.entities.Product;
+import uol.compass.commerce.resources.ProductResources;
 
 public class Application {
 
-    private static EntityManagerFactory entityManagerFactory;
-    private static EntityManager entityManager;
-    private static ProductDAO productDAO;
-    private static Scanner scanner;
+  public static Scanner kb = new Scanner(System.in);
 
-    public static void main(String[] args) throws SQLException {
-        entityManagerFactory = Persistence.createEntityManagerFactory("uol.compass.commerce");
-        entityManager = entityManagerFactory.createEntityManager();
-        productDAO = new ProductDAOImpl(entityManager);
-        scanner = new Scanner(System.in);
+  public static void main(String[] args) {
+    showMenu(); // exibe o menu principal
+  }
 
-        // Menu interativo
-        int choice = 0;
-        do {
-            System.out.println("Menu:");
-            System.out.println("1. Inserir produto");
-            System.out.println("2. Exibir todos os produtos em JSON");
-            System.out.println("3. Sair");
-            System.out.print("Escolha uma opção: ");
-            choice = scanner.nextInt();
+  public static void showMenu() {
+    int opMenu = 0;
+    ProductResources productResources = new ProductResources();
 
-            switch (choice) {
-                case 1:
-                    insertProductFromInput();
-                    break;
-                case 2:
-                    displayAllProductsAsJson();
-                    break;
-                case 3:
-                    System.out.println("Saindo...");
-                    break;
-                default:
-                    System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
-            }
-        } while (choice != 3);
+    // vai desenhar a tela de menu enquanto a opção não for 0;
+    do {
+      Menu.showMainMenu(kb, productResources);
+    } while (opMenu != 0);
+  }
 
-        // Fechando o scanner
-        scanner.close();
-        entityManager.close();
-        entityManagerFactory.close();
-    }
+  public static void insertProductFromInput(Scanner scanner, ProductResources productResources) {
+    Product product = new Product();
+    scanner.nextLine(); // Consumir a quebra de linha pendente após o nextInt()
+    
+    System.out.print("Nome do produto: ");
+    product.setName(scanner.nextLine());
 
-    public static void insertProductFromInput() {
-        Product product = new Product();
-        scanner.nextLine(); // Consumir a quebra de linha pendente após o nextInt()
-        
-        System.out.print("Nome do produto: ");
-        product.setProductName(scanner.nextLine());
+    System.out.print("Descrição do produto: ");
+    product.setDescription(scanner.nextLine());
 
-        System.out.print("Código do produto: ");
-        product.setProductCode(scanner.nextLine());
+    System.out.print("Preço: ");
+    product.setValue(scanner.nextDouble());
 
-        System.out.print("Modelo: ");
-        product.setModel(scanner.nextLine());
+    // Inserir o produto
+    productResources.insertProduct(product);
+  }
 
-        System.out.print("Cor: ");
-        product.setColor(scanner.nextLine());
+  public static void displayAllProductsAsJson(ProductResources productResources) {
+    productResources.displayAllProductsAsJson();
+  }
 
-        System.out.print("Capacidade: ");
-        product.setCapacity(scanner.nextLine());
+  public static void updateProductById(Scanner scanner, ProductResources productResources) {
+    System.out.print("ID do produto a ser atualizado: ");
+    int id = scanner.nextInt();
+    Product product = new Product();
+    scanner.nextLine(); // Consumir a quebra de linha pendente após o nextInt()
+    
+    System.out.print("Novo nome do produto: ");
+    product.setName(scanner.nextLine());
 
-        System.out.print("Status (Disponível/Indisponível): ");
-        product.setStatus(scanner.nextLine());
+    System.out.print("Nova descrição do produto: ");
+    product.setDescription(scanner.nextLine());
 
-        System.out.print("Quantidade: ");
-        product.setQuantity(scanner.nextInt());
+    System.out.print("Novo preço: ");
+    product.setValue(scanner.nextDouble());
 
-        System.out.print("Preço: ");
-        product.setPrice(scanner.nextDouble());
+    productResources.updateProductById(id, product);
+  }
 
-        // Inserir o produto no banco de dados
-        productDAO.insertProduct(product);
-        System.out.println("Produto inserido com sucesso!");
-    }
+  public static void deleteProductById(Scanner scanner, ProductResources productResources) {
+    System.out.print("ID do produto a ser deletado: ");
+    int id = scanner.nextInt();
 
-    public static void displayAllProductsAsJson() {
-        String productsJson = productDAO.getAllProductsAsJson();
-        System.out.println(productsJson);
-    }
+    productResources.deleteProductById(id);
+  }
 }
