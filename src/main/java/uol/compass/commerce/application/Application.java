@@ -9,6 +9,7 @@ import jakarta.persistence.Persistence;
 import uol.compass.commerce.dao.ProductDAO;
 import uol.compass.commerce.dao.ProductDAOImpl;
 import uol.compass.commerce.entities.Product;
+import uol.compass.commerce.resources.ProductResources;
 
 public class Application {
 
@@ -16,6 +17,7 @@ public class Application {
     private static EntityManager entityManager;
     private static ProductDAO productDAO;
     private static Scanner scanner;
+    private static ProductResources productResources = new ProductResources();
 
     public static void main(String[] args) throws SQLException {
         entityManagerFactory = Persistence.createEntityManagerFactory("uol.compass.commerce");
@@ -29,7 +31,9 @@ public class Application {
             System.out.println("Menu:");
             System.out.println("1. Inserir produto");
             System.out.println("2. Exibir todos os produtos em JSON");
-            System.out.println("3. Sair");
+            System.out.println("3. Atualizar produto por ID");
+            System.out.println("4. Deletar produto por ID");
+            System.out.println("5. Sair");
             System.out.print("Escolha uma opção: ");
             choice = scanner.nextInt();
 
@@ -41,12 +45,18 @@ public class Application {
                     displayAllProductsAsJson();
                     break;
                 case 3:
+                    updateProductById();
+                    break;
+                case 4:
+                    deleteProductById();
+                    break;
+                case 5:
                     System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida. Por favor, escolha uma opção válida.");
             }
-        } while (choice != 3);
+        } while (choice != 5);
 
         // Fechando o scanner
         scanner.close();
@@ -59,28 +69,13 @@ public class Application {
         scanner.nextLine(); // Consumir a quebra de linha pendente após o nextInt()
         
         System.out.print("Nome do produto: ");
-        product.setProductName(scanner.nextLine());
+        product.setName(scanner.nextLine());
 
-        System.out.print("Código do produto: ");
-        product.setProductCode(scanner.nextLine());
-
-        System.out.print("Modelo: ");
-        product.setModel(scanner.nextLine());
-
-        System.out.print("Cor: ");
-        product.setColor(scanner.nextLine());
-
-        System.out.print("Capacidade: ");
-        product.setCapacity(scanner.nextLine());
-
-        System.out.print("Status (Disponível/Indisponível): ");
-        product.setStatus(scanner.nextLine());
-
-        System.out.print("Quantidade: ");
-        product.setQuantity(scanner.nextInt());
+        System.out.print("Descrição do produto: ");
+        product.setDescription(scanner.nextLine());
 
         System.out.print("Preço: ");
-        product.setPrice(scanner.nextDouble());
+        product.setValue(scanner.nextDouble());
 
         // Inserir o produto no banco de dados
         productDAO.insertProduct(product);
@@ -90,5 +85,30 @@ public class Application {
     public static void displayAllProductsAsJson() {
         String productsJson = productDAO.getAllProductsAsJson();
         System.out.println(productsJson);
+    }
+
+    public static void updateProductById() {
+        System.out.print("ID do produto a ser atualizado: ");
+        int id = scanner.nextInt();
+        Product product = new Product();
+        scanner.nextLine(); // Consumir a quebra de linha pendente após o nextInt()
+        
+        System.out.print("Novo nome do produto: ");
+        product.setName(scanner.nextLine());
+
+        System.out.print("Nova descrição do produto: ");
+        product.setDescription(scanner.nextLine());
+
+        System.out.print("Novo preço: ");
+        product.setValue(scanner.nextDouble());
+
+        productResources.updateProductById(id, product);
+    }
+
+    public static void deleteProductById() {
+        System.out.print("ID do produto a ser deletado: ");
+        int id = scanner.nextInt();
+
+        productResources.deleteProductById(id);
     }
 }
