@@ -12,11 +12,16 @@ public class ProductResources {
             System.out.println("Erro: Atributos inválidos.");
             return;
         }
+        
+        try {
+            Product updatedProduct = service.updateProductById(id, product);            
 
-        Product updatedProduct = service.updateProductById(id, product);
-
-        System.out.printf("{%n   'id': %d,%n   'name': '%s',%n   'description': '%s',%n   'value': %.2f%n}%n",
+            System.out.printf("{%n   'id': %d,%n   'name': '%s',%n   'description': '%s',%n   'value': %.2f%n}%n",
             updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getDescription(), updatedProduct.getValue());
+        
+        } catch (Exception e) {
+            System.out.println("Erro: Produto não encontrado.%Detalhes: " + e.getMessage());
+        }
     }
 
     public boolean productAttributesAreValid(Product p) {
