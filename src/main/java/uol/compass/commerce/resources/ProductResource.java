@@ -12,21 +12,25 @@ public class ProductResource {
     service = new ProductService();
   }
 
-  public void insertProduct(Product product) {
+  public Product insertProduct(Product product) {
     if(!productAttributesAreValid(product)) {
       System.out.println("Erro: Atributos inválidos.");
-      return;
+      return null;
     }
     
     try {
-      Product updatedProduct = service.insertProduct(product);
+      Product insertedProduct = service.insertProduct(product);
+
+      if(insertedProduct == null) {
+        System.out.println("Erro: Produto não inserido.");
+        return null;
+      }
 
       System.out.println("Produto inserido com sucesso.");
-      System.out.printf("{%n   'id': %d,%n   'name': '%s',%n   'description': '%s',%n   'value': %.2f%n}%n",
-      updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getDescription(), updatedProduct.getValue());
-    
+      return insertedProduct;
     } catch (Exception e) {
       System.out.println("Erro: " + e.getMessage());
+      return null;
     }
   }
 
@@ -34,22 +38,30 @@ public class ProductResource {
     return service.getAllProducts();
   }
 
-  public void updateProductById(Integer id, Product product) {
+  public Product updateProductById(Integer id, Product product) {
     if(!productAttributesAreValid(product)) {
       System.out.println("Erro: Atributos inválidos.");
-      return;
+      return null;
     }
     
     try {
       Product updatedProduct = service.updateProductById(id, product);
 
       System.out.println("Produto atualizado com sucesso.");
-      System.out.printf("{%n   'id': %d,%n   'name': '%s',%n   'description': '%s',%n   'value': %.2f%n}%n",
-      updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getDescription(), updatedProduct.getValue());
-    
+      return updatedProduct;    
     } catch (Exception e) {
       System.out.println("Erro: " + e.getMessage());
+      return null;
     }
+  }
+
+  public Product getProductById(Integer id) {
+    if(id == null || id < 0) {
+      System.out.println("Erro: ID inválido.");
+      return null;
+    }
+
+    return service.getProductById(id);
   }
 
   public void deleteProductById(Integer id) {

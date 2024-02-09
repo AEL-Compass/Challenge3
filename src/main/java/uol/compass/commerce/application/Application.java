@@ -36,7 +36,13 @@ public class Application {
     product.setValue(scanner.nextDouble());
 
     // Inserir o produto
-    productResources.insertProduct(product);
+    Product inserted = productResources.insertProduct(product);
+    
+    if(inserted == null) {
+      return;
+    }
+
+    printProductAsJson(inserted, false);
   }
 
   public static void getAllProducts(ProductResource productResources) {
@@ -44,8 +50,7 @@ public class Application {
 
     System.out.println("[");
     for (int i = 0; i < products.size(); i++) {
-      System.out.printf("   {%n      'id': %d,%n      'name': '%s',%n      'description': '%s',%n      'value': %.2f%n   }",
-      products.get(i).getId(), products.get(i).getName(), products.get(i).getDescription(), products.get(i).getValue());
+      printProductAsJson(products.get(i), true);
       if(i < products.size() - 1) {
         System.out.println(",");
       }
@@ -53,10 +58,28 @@ public class Application {
     System.out.printf("%n]");
   }
 
+  public static void getProductById(Scanner scanner, ProductResource productResources) {
+    System.out.print("ID do produto: ");
+    int id = scanner.nextInt();
+    Product product = productResources.getProductById(id);
+
+    if(product == null) {
+      System.out.println("Produto não encontrado.");
+      return;
+    }
+
+    printProductAsJson(product, false);
+  }
+
   public static void updateProductById(Scanner scanner, ProductResource productResources) {
     System.out.print("ID do produto a ser atualizado: ");
     int id = scanner.nextInt();
-    Product product = new Product();
+    Product product = productResources.getProductById(id);
+
+    if(product == null) {
+      System.out.println("Produto não encontrado.");
+      return;
+    }
     scanner.nextLine(); // Consumir a quebra de linha pendente após o nextInt()
     
     System.out.print("Novo nome do produto: ");
@@ -66,7 +89,13 @@ public class Application {
     System.out.print("Novo preço: ");
     product.setValue(scanner.nextDouble());
 
-    productResources.updateProductById(id, product);
+    Product updated = productResources.updateProductById(id, product);
+    
+    if(updated == null) {
+      return;
+    }
+
+    printProductAsJson(updated, false);
   }
 
   public static void deleteProductById(Scanner scanner, ProductResource productResources) {
@@ -74,5 +103,13 @@ public class Application {
     int id = scanner.nextInt();
 
     productResources.deleteProductById(id);
+  }
+
+  public static void printProductAsJson(Product product, Boolean isList) {
+    if (isList) {      
+      System.out.printf("   {%n      'id': %d,%n      'name': '%s',%n      'description': '%s',%n      'value': %.2f%n   }", product.getId(), product.getName(), product.getDescription(), product.getValue());
+    } else {
+      System.out.printf("{%n   'id': %d,%n   'name': '%s',%n   'description': '%s',%n   'value': %.2f%n}", product.getId(), product.getName(), product.getDescription(), product.getValue());
+    }
   }
 }

@@ -50,8 +50,9 @@ public class Menu {
       System.out.println("|                                              |");
       System.out.println("|  1 - Inserir produto                         |");
       System.out.println("|  2 - Exibir todos os produtos em JSON        |");
-      System.out.println("|  3 - Atualizar produto por ID                |");
-      System.out.println("|  4 - Deletar produto por ID                  |");
+      System.out.println("|  3 - Buscar produto por ID                   |");
+      System.out.println("|  4 - Atualizar produto por ID                |");
+      System.out.println("|  5 - Deletar produto por ID                  |");
       System.out.println("|  0 - Voltar ao menu principal                |");
       System.out.println("|                                              |");
       System.out.println("------------------------------------------------");
@@ -68,9 +69,12 @@ public class Menu {
           Application.getAllProducts(productResource);
           break;
         case 3:
-          Application.updateProductById(scanner, productResource);
+          Application.getProductById(scanner, productResource);
           break;
         case 4:
+          Application.updateProductById(scanner, productResource);
+          break;
+        case 5:
           Application.deleteProductById(scanner, productResource);
           break;
         default:

@@ -19,6 +19,10 @@ public class ProductService {
   public List<Product> getAllProducts() {
     return repository.getAllProducts();
   }
+
+  public Product getProductById(Integer id) {
+    return repository.findById(id);
+  }
   
   public Product updateProductById(Integer id, Product product) {
     Product verifyProduct = repository.findById(id);
