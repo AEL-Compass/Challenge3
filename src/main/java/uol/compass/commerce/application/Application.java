@@ -27,22 +27,26 @@ public class Application {
   public static void insertProduct(Scanner scanner, ProductResource productResources) {
     Product product = new Product();
     scanner.nextLine(); // Consumir a quebra de linha pendente após o nextInt()
-    
-    System.out.print("Nome do produto: ");
-    product.setName(scanner.nextLine());
-    System.out.print("Descrição do produto: ");
-    product.setDescription(scanner.nextLine());
-    System.out.print("Preço: ");
-    product.setValue(scanner.nextDouble());
+    try{
 
-    // Inserir o produto
-    Product inserted = productResources.insertProduct(product);
-    
-    if(inserted == null) {
-      return;
+      System.out.print("Nome do produto: ");
+      product.setName(scanner.nextLine());
+      System.out.print("Descrição do produto: ");
+      product.setDescription(scanner.nextLine());
+      System.out.print("Preço: ");
+      product.setValue(scanner.nextDouble());
+  
+      // Inserir o produto
+      Product inserted = productResources.insertProduct(product);
+      
+      if(inserted == null) {
+        return;
+      }
+  
+      printProductAsJson(inserted, false);
+    } catch (Exception e){
+      System.out.println("Informacoes invalidas!");
     }
-
-    printProductAsJson(inserted, false);
   }
 
   public static void getAllProducts(ProductResource productResources) {
@@ -80,22 +84,27 @@ public class Application {
       System.out.println("Produto não encontrado.");
       return;
     }
+    
     scanner.nextLine(); // Consumir a quebra de linha pendente após o nextInt()
-    
-    System.out.print("Novo nome do produto: ");
-    product.setName(scanner.nextLine());
-    System.out.print("Nova descrição do produto: ");
-    product.setDescription(scanner.nextLine());
-    System.out.print("Novo preço: ");
-    product.setValue(scanner.nextDouble());
-
-    Product updated = productResources.updateProductById(id, product);
-    
-    if(updated == null) {
-      return;
+    try{
+      Product toUpdate = new Product();
+      System.out.print("Nome do produto(" + product.getName() + "): ");
+      toUpdate.setName(scanner.nextLine());
+      System.out.print("Descrição do produto(" + product.getDescription() + "): ");
+      toUpdate.setDescription(scanner.nextLine());
+      System.out.print("Novo preço(" + product.getValue() + "): ");
+      toUpdate.setValue(scanner.nextDouble());
+  
+      Product updated = productResources.updateProductById(id, toUpdate);
+      
+      if(updated == null) {
+        return;
+      }  
+      printProductAsJson(updated, false);
+  
+    } catch (Exception e) {
+      System.out.println("Informções inválidas!");
     }
-
-    printProductAsJson(updated, false);
   }
 
   public static void deleteProductById(Scanner scanner, ProductResource productResources) {
