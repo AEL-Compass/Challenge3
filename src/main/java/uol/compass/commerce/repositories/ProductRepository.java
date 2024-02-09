@@ -2,12 +2,8 @@ package uol.compass.commerce.repositories;
 
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Query;
 import uol.compass.commerce.entities.Product;
 
 public class ProductRepository {

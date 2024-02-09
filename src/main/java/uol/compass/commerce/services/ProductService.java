@@ -3,6 +3,7 @@ package uol.compass.commerce.services;
 import java.util.List;
 
 import uol.compass.commerce.entities.Product;
+import uol.compass.commerce.exceptions.ProductNotFoundException;
 import uol.compass.commerce.repositories.ProductRepository;
 
 public class ProductService {
@@ -28,7 +29,7 @@ public class ProductService {
     Product verifyProduct = repository.findById(id);
 
     if(verifyProduct == null) {
-      throw new RuntimeException("Produto não encontrado.");
+      throw new ProductNotFoundException("Produto não encontrado.");
     }
     return repository.updateById(id, product);
   }
@@ -36,8 +37,8 @@ public class ProductService {
   public void deleteProductById(Integer id) {
     Product verifyProduct = repository.findById(id);
 
-    if(verifyProduct == null) {
-      throw new RuntimeException("Produto não encontrado.");
+    if (verifyProduct == null) {
+      throw new ProductNotFoundException("Produto não encontrado.");
     }
 
     repository.deleteById(id);

@@ -8,7 +8,7 @@ import uol.compass.commerce.resources.ProductResource;
 
 public class Application {
 
-  public static Scanner kb = new Scanner(System.in);
+  private static final Scanner kb = new Scanner(System.in);
 
   public static void main(String[] args) {
     showMenu(); // exibe o menu principal
@@ -105,7 +105,7 @@ public class Application {
     productResources.deleteProductById(id);
   }
 
-  public static void printProductAsJson(Product product, Boolean isList) {
+  public static void printProductAsJson(Product product, boolean isList) {
     if (isList) {      
       System.out.printf("   {%n      'id': %d,%n      'name': '%s',%n      'description': '%s',%n      'value': %.2f%n   }", product.getId(), product.getName(), product.getDescription(), product.getValue());
     } else {
