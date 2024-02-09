@@ -2,11 +2,11 @@ package uol.compass.commerce.application;
 
 import java.util.Scanner;
 
-import uol.compass.commerce.resources.ProductResources;
+import uol.compass.commerce.resources.ProductResource;
 
 public class Menu {
 
-  public static void showMainMenu(Scanner scanner, ProductResources productResources) {
+  public static void showMainMenu(Scanner scanner, ProductResource productResource) {
     int choice = 0;
     do {
       limpaTela(20);
@@ -28,7 +28,7 @@ public class Menu {
         case 0:
           break;
         case 1:
-          showProdutosMenu(scanner, productResources);
+          showProdutosMenu(scanner, productResource);
           break;
         case 2:
           showCreditos(scanner);
@@ -40,7 +40,7 @@ public class Menu {
     } while (choice != 0);
   }
 
-  public static void showProdutosMenu(Scanner scanner, ProductResources productResources) {
+  public static void showProdutosMenu(Scanner scanner, ProductResource productResource) {
     int choice = 0;
     do {
       limpaTela(20);
@@ -62,16 +62,16 @@ public class Menu {
         case 0:
           break;
         case 1:
-          Application.insertProductFromInput(scanner, productResources);
+          Application.insertProduct(scanner, productResource);
           break;
         case 2:
-          Application.displayAllProductsAsJson(productResources);
+          Application.getAllProducts(productResource);
           break;
         case 3:
-          Application.updateProductById(scanner, productResources);
+          Application.updateProductById(scanner, productResource);
           break;
         case 4:
-          Application.deleteProductById(scanner, productResources);
+          Application.deleteProductById(scanner, productResource);
           break;
         default:
           showOpcaoInvalida(scanner);

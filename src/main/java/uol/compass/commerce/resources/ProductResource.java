@@ -3,27 +3,35 @@ package uol.compass.commerce.resources;
 import java.util.List;
 
 import uol.compass.commerce.entities.Product;
-import uol.compass.commerce.repositories.ProductRepository;
+import uol.compass.commerce.services.ProductService;
 
-public class ProductResources {
-  private ProductRepository repository;
+public class ProductResource {
+  private ProductService service;
 
-  public ProductResources() {
-    repository = new ProductRepository();
+  public ProductResource() {
+    service = new ProductService();
   }
 
   public void insertProduct(Product product) {
-    repository.insertProduct(product);
-    System.out.println("Produto inserido com sucesso!");
-  }
+    if(!productAttributesAreValid(product)) {
+      System.out.println("Erro: Atributos inválidos.");
+      return;
+    }
+    
+    try {
+      Product updatedProduct = service.insertProduct(product);
 
-  public void displayAllProductsAsJson() {
-    String productsJson = repository.getAllProductsAsJson();
-    System.out.println(productsJson);
+      System.out.println("Produto inserido com sucesso.");
+      System.out.printf("{%n   'id': %d,%n   'name': '%s',%n   'description': '%s',%n   'value': %.2f%n}%n",
+      updatedProduct.getId(), updatedProduct.getName(), updatedProduct.getDescription(), updatedProduct.getValue());
+    
+    } catch (Exception e) {
+      System.out.println("Erro: " + e.getMessage());
+    }
   }
 
   public List<Product> getAllProducts() {
-    return repository.getAllProducts();
+    return service.getAllProducts();
   }
 
   public void updateProductById(Integer id, Product product) {
@@ -33,7 +41,7 @@ public class ProductResources {
     }
     
     try {
-      Product updatedProduct = repository.updateById(id, product);
+      Product updatedProduct = service.updateProductById(id, product);
 
       System.out.println("Produto atualizado com sucesso.");
       System.out.printf("{%n   'id': %d,%n   'name': '%s',%n   'description': '%s',%n   'value': %.2f%n}%n",
@@ -46,7 +54,7 @@ public class ProductResources {
 
   public void deleteProductById(Integer id) {
     try {
-      repository.deleteById(id);
+      service.deleteProductById(id);
       System.out.println("Produto deletado com sucesso.");
     } catch (Exception e) {
       System.out.println("Erro: " + e.getMessage());

@@ -20,35 +20,25 @@ public class ProductRepository {
     transaction = entityManager.getTransaction();
   }
 
-  public void insertProduct(Product product) {
+  public Product insertProduct(Product product) {
     try {
       if (!transaction.isActive()) {
         transaction.begin();
         entityManager.persist(product);
+        entityManager.flush();
         transaction.commit();
       }
+      return product;
     } catch (Exception e) {
       if (transaction.isActive()) {
         transaction.rollback();
       }
-      e.printStackTrace();
+      return null;
     }
   }
 
   public List<Product> getAllProducts() {
-    Query query = entityManager.createQuery("SELECT p FROM Product p");
-    return query.getResultList();
-  }
-
-  public String getAllProductsAsJson() {
-    List<Product> productList = getAllProducts();
-    ObjectMapper objectMapper = new ObjectMapper();
-    try {
-      return objectMapper.writeValueAsString(productList);
-    } catch (JsonProcessingException e) {
-      e.printStackTrace();
-      return null;
-    }
+    return entityManager.createQuery("SELECT p FROM Product p", Product.class).getResultList();
   }
 
   public Product findById(Integer id) {
@@ -61,6 +51,7 @@ public class ProductRepository {
     productToUpdate.setName(product.getName());
     productToUpdate.setDescription(product.getDescription());
     productToUpdate.setValue(product.getValue());
+    entityManager.flush();
     transaction.commit();
     return productToUpdate;
   }

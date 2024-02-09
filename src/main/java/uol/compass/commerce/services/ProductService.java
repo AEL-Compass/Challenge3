@@ -1,13 +1,23 @@
 package uol.compass.commerce.services;
 
+import java.util.List;
+
 import uol.compass.commerce.entities.Product;
 import uol.compass.commerce.repositories.ProductRepository;
 
-public class ProductServices {
+public class ProductService {
   ProductRepository repository;
 
-  public ProductServices() {
+  public ProductService() {
     repository = new ProductRepository();
+  }
+
+  public Product insertProduct(Product product) {
+    return repository.insertProduct(product);
+  }
+
+  public List<Product> getAllProducts() {
+    return repository.getAllProducts();
   }
   
   public Product updateProductById(Integer id, Product product) {
